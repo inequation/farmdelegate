@@ -54,7 +54,6 @@ class FarmDelegate {
 			assert(m_FMPtr.method != 0);
 			METHOD_PTR(meth) = *((METHOD_PTR(*))(&m_FMPtr.method));
 			return (static_cast<TARGET_CLASS *>(m_objPtr)->*meth)(ARGS...);
-			return 0;
 		}
 
 		RETURN_TYPE CallFunc(TX... ARGS) {
