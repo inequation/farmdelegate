@@ -17,6 +17,14 @@ class dummy {
 		}
 };
 
+class dummy2 {
+	public:
+		int omg(int e, int f) {
+			cout << "omg " << e << endl;
+			return e * f;
+		}
+};
+
 dummy y;
 
 int main()
@@ -34,7 +42,10 @@ int main()
     cout << "d(1, 3) = " << d(1, 3) << endl;
     dummy x;
     d.Set<dummy>(&x, &dummy::bar);
-    cout << "m(2, 4) = " << d(2, 4) << endl;
+    cout << "d(2, 4) = " << d(2, 4) << endl;
+    dummy2 z;
+    d.Set<dummy2>(&z, &dummy2::omg);
+    cout << "d(9, 10) = " << d(9, 10) << endl;
 
     return 0;
 }
