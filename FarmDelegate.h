@@ -2,8 +2,32 @@
 #define FARMDELEGATE_H
 
 #include <cassert>
+#include <cstring>
 
-#ifdef CYCKI//__GXX_EXPERIMENTAL_CXX0X__
+// compiler-based detection of maximum method pointer size
+#if defined(__GNUC__)			// G++
+	#define MPTR_SIZE 8
+#elif defined(_MSC_VER)			// MS Visual C++
+	#define MPTR_SIZE 16
+#elif defined(__INTEL_COMPILER)	// Intel C++ Compiler
+	// these pointers are 20-byte on Itanium
+	#if defined(_M_IA64) || defined(__IA64__) || defined(__ia64)
+		#define MPTR_SIZE 20
+	#else
+		#define MPTR_SIZE 16
+	#endif
+#elif defined(__DMC__)			// Digital Mars Compiler
+	#define MPTR_SIZE 4
+#elif defined(__BORLANDC__)		// Borland C++
+	#define MPTR_SIZE 12
+#elif defined(__WATCOMC__)
+	#define MPTR_SIZE 12
+#else
+	#warning Could not determine compiler, falling back to method pointer size failsafe of 20 bytes
+	#define MPTR_SIZE 20
+#endif
+
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
 	// use C++0x variadic templates
 
 	#define TEMPL_PARAMS
@@ -57,5 +81,7 @@
 	#undef FUNC_ARGS_DECL
 	#undef TEMPL_PARAMS
 #endif // __GXX_EXPERIMENTAL_CXX0X__
+
+#undef MPTR_SIZE
 
 #endif // FARMDELEGATE_H
