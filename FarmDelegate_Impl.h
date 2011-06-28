@@ -1,5 +1,4 @@
 // reverse header guard - ONLY include this file inside FarmDelegate.h
-#define FARMDELEGATE_H
 #ifdef FARMDELEGATE_H
 
 class FarmDelegate TEMPL_PARAMS {
@@ -11,14 +10,10 @@ class FarmDelegate TEMPL_PARAMS {
 
 	public:
 		FarmDelegate() : m_inFuncPtr(NULL), m_objPtr(NULL) {
-			// make sure MPTR is large enough to accomodate a method pointer
-			assert(sizeof(MPTR) >= sizeof(INDIR_FUNC_PTR));
 			memset(m_FMPtr.method, 0, sizeof(MPTR));
 		}
 
 		FarmDelegate(FUNC_PTR funcPtr) {
-			// make sure MPTR is large enough to accomodate a method pointer
-			assert(sizeof(MPTR) >= sizeof(INDIR_FUNC_PTR));
 			this->Set(funcPtr);
 		}
 
