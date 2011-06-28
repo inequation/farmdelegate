@@ -32,7 +32,7 @@ class FarmDelegate TEMPL_PARAMS {
 			assert(objPtr != NULL);
 			assert(methodPtr != NULL);
 			// make sure MPTR is large enough to accomodate a method pointer
-			assert(sizeof(MPTR) >= sizeof(INDIR_FUNC_PTR));
+			assert(sizeof(MPTR) >= sizeof(methodPtr));
 			m_objPtr = objPtr;
 			memcpy(m_FMPtr.method, &methodPtr, sizeof(methodPtr));
 			m_inFuncPtr = &FarmDelegate::CallMethod<TARGET_CLASS>;
