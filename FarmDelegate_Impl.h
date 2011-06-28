@@ -5,7 +5,7 @@
 class FarmDelegate TEMPL_PARAMS {
 	private:
 		typedef RETURN_TYPE (*FUNC_PTR)(FUNC_ARGS_DECL);
-		typedef RETURN_TYPE (FarmDelegate::*INDIR_FUNC_PTR)(FUNC_ARGS_DECL);
+		typedef RETURN_TYPE (*INDIR_FUNC_PTR)(FarmDelegate TEMPL_PARAMS *d, FUNC_ARGS_DECL);
 		#define METHOD_PTR(symbol)	RETURN_TYPE (TARGET_CLASS::*symbol)(FUNC_ARGS_DECL)
 		typedef unsigned char MPTR[MPTR_SIZE];
 
@@ -42,20 +42,20 @@ class FarmDelegate TEMPL_PARAMS {
 
 		RETURN_TYPE operator()(FUNC_ARGS_DECL) {
 			assert(m_inFuncPtr != NULL);
-			return (this->*m_inFuncPtr)(FUNC_ARGS);
+			return m_inFuncPtr(this, FUNC_ARGS);
 		}
 
 	private:
 		template <typename TARGET_CLASS>
-		RETURN_TYPE CallMethod(FUNC_ARGS_DECL) {
-			assert(m_objPtr != NULL);
-			assert(m_FMPtr.method != 0);
-			return (static_cast<TARGET_CLASS *>(m_objPtr)->*(*((METHOD_PTR(*))(m_FMPtr.method))))(FUNC_ARGS);
+		static RETURN_TYPE CallMethod(FarmDelegate TEMPL_PARAMS *d, FUNC_ARGS_DECL) {
+			assert(d->m_objPtr != NULL);
+			assert(d->m_FMPtr.method != 0);
+			return (static_cast<TARGET_CLASS *>(d->m_objPtr)->*(*((METHOD_PTR(*))(d->m_FMPtr.method))))(FUNC_ARGS);
 		}
 
-		RETURN_TYPE CallFunc(FUNC_ARGS_DECL) {
-			assert(m_FMPtr.func != NULL);
-			return m_FMPtr.func(FUNC_ARGS);
+		static RETURN_TYPE CallFunc(FarmDelegate TEMPL_PARAMS *d, FUNC_ARGS_DECL) {
+			assert(d->m_FMPtr.func != NULL);
+			return d->m_FMPtr.func(FUNC_ARGS);
 		}
 
 		INDIR_FUNC_PTR	m_inFuncPtr;
